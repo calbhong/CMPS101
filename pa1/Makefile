@@ -1,5 +1,11 @@
+#******************************************************************************
+# Calvin Hong, cbhong
+# 2019 Summer CMPS101 PA1
+# Makefile
+# Makefile for PA1
+#******************************************************************************
 #------------------------------------------------------------------------------
-# Makefile for CMPS 101 Programming Assignment 2
+# Makefile for CMPS 101 Programming Assignment 1
 #
 #       make                   makes Lex
 #       make ListClient        makes ListClient
