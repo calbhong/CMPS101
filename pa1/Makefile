@@ -33,7 +33,7 @@ check:
 	ls /afs/cats.ucsc.edu/class/cmps101-pt.u19/pa1/cbhong
 
 memCheck:
-	valgrind --leack-check=full ListClient
+	valgrind --leak-check=full ListClient
 
 submit :
 	submit cmps101-pt.u19 pa1 List.h List.c ListClient.c Lex.c Makefile README
