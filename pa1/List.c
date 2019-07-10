@@ -43,19 +43,16 @@ void freeNode(Node* pN){
 List newList(void){
 	List L;
 	L = malloc(sizeof(ListObj));
-	L->front = L->back = NULL;
+	L->front = L->back = L->cursor = NULL;
 	L->length = 0;
 	L->index = -1;
 	return(L);
 }
 
 void freeList(List* pL){
-	if(pL !=NULL && *pL !=NULL) {
-		Node temp = (*pL)->front;
-		while( temp != NULL) {
-			Node N = temp;
-			temp = temp->next;
-			free(N);
+	if(pL != NULL && *pL != NULL){
+		while(length(*pL) > 0){
+			deleteFront(*pL);
 		}
 		free(*pL);
 		*pL = NULL;
@@ -127,7 +124,7 @@ int equals(List A, List B){
 	Node tempA = A->front;
 	Node tempB = B->front;
 
-	while(tempB->next != NULL && tempA != NULL){
+	while(tempB != NULL && tempA != NULL){
 		if(tempB->data != tempA->data){
 			return 0;
 		}
@@ -300,7 +297,7 @@ void deleteFront(List L){
 		exit(1);
 	}
 	N = L->front;
-	if(L->index == 0){
+	if(L->cursor == N){
    		L->index = -1;
    		L->cursor = NULL;
 	}
@@ -311,6 +308,7 @@ void deleteFront(List L){
 		L->index--;
 	}
 	L->length--;
+	freeNode(&N);
 }
 void deleteBack(List L){
 	Node N = NULL;
@@ -330,6 +328,7 @@ void deleteBack(List L){
 		L->back = L->back->prev;
 	}
 	L->length--;
+	freeNode(&N);
 }
 void delete(List L){
 	Node N = NULL;
@@ -360,6 +359,8 @@ void delete(List L){
 	L->cursor = NULL;
 	L->index = -1;
 	L->length--;
+
+	freeNode(&N);
 	}
 
 }
@@ -377,9 +378,7 @@ List copyList(List L){
 	Node temp = L->front;
 	while(temp != NULL){
 		append(c, temp->data);
-		if(temp->next!=NULL){
-			temp = temp->next;
-		}
+		temp = temp->next;
 	}
 	return c;
 }
