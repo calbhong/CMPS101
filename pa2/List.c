@@ -9,8 +9,13 @@
 #include<stdlib.h>
 #include "List.h"
 
+/*change the data type of the data within
+the Node to a pointer of sorts that simply
+points to the entry rather than return an int
+*/
+
 typedef struct NodeObj{
-	int data;
+	void* data;
 	struct NodeObj* prev;
 	struct NodeObj* next;
 } NodeObj;
@@ -25,7 +30,7 @@ typedef struct ListObj{
 	int index;
 } ListObj;
 
-Node newNode(int data){
+Node newNode(void* data){
 	Node N = malloc(sizeof(NodeObj));
 	N->data = data;
 	N->next = NULL;
@@ -75,7 +80,7 @@ int index(List L){
 	}
 	return L->index;
 }
-int front(List L){
+void *front(List L){
 	if(L == NULL){
 		printf("List Error: calling front() on NULL List reference\n");
 		exit(1);
@@ -86,7 +91,7 @@ int front(List L){
 	}
 	return L->front->data;
 }
-int back(List L){
+void *back(List L){
 	if(L == NULL){
 		printf("List Error: calling back() on NULL List reference\n");
 		exit(1);
@@ -97,7 +102,7 @@ int back(List L){
 	}
 	return L->back->data;
 }
-int get(List L){
+void *get(List L){
 	if(L == NULL){
 		printf("List Error: calling get() on NULL List reference\n");
 		exit(1);
@@ -215,7 +220,7 @@ void moveNext(List L){
 	}	
 }
 
-void prepend(List L, int data){
+void prepend(List L, void* data){
 	if(L == NULL){
 		printf("List Error: calling prepend() on NULL List reference\n");
 		exit(1);
@@ -231,7 +236,7 @@ void prepend(List L, int data){
 	}
 	L->length++;	
 }
-void append(List L, int data){
+void append(List L, void* data){
 	if(L == NULL){
 		printf("List Error: calling append() on NULL List reference\n");
 		exit(1);
@@ -248,7 +253,7 @@ void append(List L, int data){
 	L->length++;
 }
 
-void insertBefore(List L, int data){
+void insertBefore(List L, void* data){
 	if(L == NULL){
 		printf("List Error: calling insertBefore() on NULL List reference\n");
 		exit(1);
@@ -269,7 +274,7 @@ void insertBefore(List L, int data){
 	}
 }
 
-void insertAfter(List L, int data){
+void insertAfter(List L, void* data){
 	if(L == NULL){
 		printf("List Error: calling insertAfter() on NULL List reference\n");
 		exit(1);
@@ -370,7 +375,7 @@ void delete(List L){
 void printList(FILE* out, List L){
 	Node temp = L->front;
 	while(temp != NULL){
-		fprintf(out, "%d ", temp->data);
+		fprintf(out, "%p ", temp->data);
 		temp = temp->next;
 	}
 }
