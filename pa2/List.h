@@ -1,6 +1,6 @@
 /*********************************************************************************
 * Calvin Hong, cbhong
-* 2019 Summer CMPS101 PA1
+* 2019 Summer CMPS101 PA2
 * List.h
 * Header file for List ADT
 *********************************************************************************/
@@ -19,7 +19,7 @@ int index(List L);
 int front(List L);
 int back(List L);
 int get(List L);
-int equals(List A, List B);
+//int equals(List A, List B);
 
 // Manipulation procedures ----------------------------------------------------
 void clear(List L);
@@ -37,6 +37,6 @@ void delete(List L);
 
 // Other operations -----------------------------------------------------------
 void printList(FILE* out, List L);
-List copyList(List L);
+//List copyList(List L);
 
 #endif

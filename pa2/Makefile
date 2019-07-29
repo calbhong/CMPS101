@@ -6,7 +6,7 @@
 #  make memcheck            runs Matrix Client under valgrind
 #------------------------------------------------------------------------------
 
-CLIENT         = MatrixClient
+CLIENT         = Sparse
 ADT1           = Matrix
 ADT2           = List
 SOURCE         = $(CLIENT).c
@@ -21,6 +21,8 @@ COMPILE        = gcc -c -std=c99 -Wall
 LINK           = gcc -o
 REMOVE         = rm -f
 MEMCHECK       = valgrind --leak-check=full
+MODULES        = List Matrix
+TESTS          = ListTest MatrixTest
 
 $(CLIENT) : $(OBJECT) $(ADT1_OBJECT) $(ADT2_OBJECT)
 	$(LINK) $(CLIENT) $(OBJECT) $(ADT1_OBJECT) $(ADT2_OBJECT)
@@ -41,7 +43,7 @@ memcheck : $(CLIENT)
 	$(MEMCHECK) $(CLIENT)
 
 submit :
-	submit cmps101-pt.u19 pa2 Makefile README
+	submit cmps101-pt.u19 pa2 Makefile README $(CLIENT).c ${MODULES:=.h} ${MODULES:=.c} ${TESTS:=.c}
 
 check:
 	ls -la /afs/cats.ucsc.edu/class/cmps101-pt.u19/pa2/cbhong

@@ -1,7 +1,10 @@
 //-----------------------------------------------------------------------------
-//  MatrixTest.c 
+//  Calvin Hong, cbhong
+//  2019 Summer CMPS101 PA2
+//  MatrixTest.c
 //  A test client for the Matrix ADT
 //-----------------------------------------------------------------------------
+
 #include<stdio.h>
 #include<stdlib.h>
 #include"Matrix.h"

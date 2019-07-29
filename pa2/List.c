@@ -1,6 +1,6 @@
 /*********************************************************************************
 * Calvin Hong, cbhong
-* 2019 Summer CMPS101 PA1
+* 2019 Summer CMPS101 PA2
 * List.c
 * List ADT
 *********************************************************************************/
@@ -112,6 +112,7 @@ int get(List L){
 	}
 	return L->cursor->data;
 }
+/*
 int equals(List A, List B){
 	if(A == NULL || B == NULL){
 		printf("List Error: calling equals() on NULL List reference\n");
@@ -133,6 +134,7 @@ int equals(List A, List B){
 	}
 	return 1;
 }
+*/
 
 void clear(List L){
 	if( L == NULL){
@@ -373,6 +375,7 @@ void printList(FILE* out, List L){
 	}
 }
 
+/*
 List copyList(List L){
 	List c = newList();
 	Node temp = L->front;
@@ -382,4 +385,5 @@ List copyList(List L){
 	}
 	return c;
 }
+*/
 	
