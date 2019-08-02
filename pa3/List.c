@@ -1,6 +1,6 @@
 /*********************************************************************************
 * Calvin Hong, cbhong
-* 2019 Summer CMPS101 PA2
+* 2019 Summer CMPS101 PA1
 * List.c
 * List ADT
 *********************************************************************************/
@@ -10,7 +10,7 @@
 #include "List.h"
 
 typedef struct NodeObj{
-	void* data;
+	int data;
 	struct NodeObj* prev;
 	struct NodeObj* next;
 } NodeObj;
@@ -25,7 +25,7 @@ typedef struct ListObj{
 	int index;
 } ListObj;
 
-Node newNode(void* data){
+Node newNode(int data){
 	Node N = malloc(sizeof(NodeObj));
 	N->data = data;
 	N->next = NULL;
@@ -75,7 +75,7 @@ int index(List L){
 	}
 	return L->index;
 }
-void *front(List L){
+int front(List L){
 	if(L == NULL){
 		printf("List Error: calling front() on NULL List reference\n");
 		exit(1);
@@ -86,7 +86,7 @@ void *front(List L){
 	}
 	return L->front->data;
 }
-void *back(List L){
+int back(List L){
 	if(L == NULL){
 		printf("List Error: calling back() on NULL List reference\n");
 		exit(1);
@@ -97,7 +97,7 @@ void *back(List L){
 	}
 	return L->back->data;
 }
-void *get(List L){
+int get(List L){
 	if(L == NULL){
 		printf("List Error: calling get() on NULL List reference\n");
 		exit(1);
@@ -112,7 +112,6 @@ void *get(List L){
 	}
 	return L->cursor->data;
 }
-/*
 int equals(List A, List B){
 	if(A == NULL || B == NULL){
 		printf("List Error: calling equals() on NULL List reference\n");
@@ -134,7 +133,6 @@ int equals(List A, List B){
 	}
 	return 1;
 }
-*/
 
 void clear(List L){
 	if( L == NULL){
@@ -215,7 +213,7 @@ void moveNext(List L){
 	}	
 }
 
-void prepend(List L, void* data){
+void prepend(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling prepend() on NULL List reference\n");
 		exit(1);
@@ -228,10 +226,10 @@ void prepend(List L, void* data){
 		temp->next = L->front;
 		L->front = temp;
 		L->index++;
-	} 
+	}
 	L->length++;	
 }
-void append(List L, void* data){
+void append(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling append() on NULL List reference\n");
 		exit(1);
@@ -248,7 +246,7 @@ void append(List L, void* data){
 	L->length++;
 }
 
-void insertBefore(List L, void* data){
+void insertBefore(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling insertBefore() on NULL List reference\n");
 		exit(1);
@@ -269,7 +267,7 @@ void insertBefore(List L, void* data){
 	}
 }
 
-void insertAfter(List L, void* data){
+void insertAfter(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling insertAfter() on NULL List reference\n");
 		exit(1);
@@ -370,11 +368,10 @@ void delete(List L){
 void printList(FILE* out, List L){
 	Node temp = L->front;
 	while(temp != NULL){
-		fprintf(out, "%p ", temp->data);
+		fprintf(out, "%d ", temp->data);
 		temp = temp->next;
 	}
 }
-
 
 List copyList(List L){
 	List c = newList();
@@ -385,5 +382,4 @@ List copyList(List L){
 	}
 	return c;
 }
-
 	

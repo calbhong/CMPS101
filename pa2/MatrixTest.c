@@ -10,7 +10,7 @@
 #include"Matrix.h"
      
 int main(){
-   int n=100000;
+   int n=100;
    Matrix A = newMatrix(n);
    Matrix B = newMatrix(n);
    Matrix C, D, E, F, G, H;

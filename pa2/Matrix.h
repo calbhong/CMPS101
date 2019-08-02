@@ -5,8 +5,8 @@
 * Header file for Matrix ADT
 *********************************************************************************/
 
-#ifndef _LIST_H_INCLUDE_
-#define _LIST_H_INCLUDE_
+#ifndef _MATRIX_H_INCLUDE_
+#define _MATRIX_H_INCLUDE_
 
 typedef struct MatrixObj* Matrix;
 // newMatrix()
