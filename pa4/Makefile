@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
-#  Makefile for CMPS 101 Programming Assignment 3
+#  Makefile for CMPS 101 Programming Assignment 5
 #
-#  make                     makes FindPath
+#  make                     makes FindComponents
 #  make GraphClient         makes GraphClient
 #  make clean               removes binaries
-#  make checkFind           tests FindPath for memory leaks on in3
+#  make checkFind           tests FindComponents for memory leaks on in3
 #  make checkClient         tests GraphClient for memory leaks
 #------------------------------------------------------------------------------
 
@@ -16,14 +16,14 @@ LINK           = gcc -o
 REMOVE         = rm -f
 MEMCHECK       = valgrind --leak-check=full
 
-FindPath : FindPath.o $(BASE_OBJECTS)
-	$(LINK) FindPath FindPath.o $(BASE_OBJECTS)
+FindComponents : FindComponents.o $(BASE_OBJECTS)
+	$(LINK) FindComponents FindComponents.o $(BASE_OBJECTS)
 
 GraphClient : GraphClient.o $(BASE_OBJECTS)
 	$(LINK) GraphClient GraphClient.o $(BASE_OBJECTS)
 
-FindPath.o : FindPath.c $(HEADERS)
-	$(COMPILE) FindPath.c
+FindComponents.o : FindComponents.c $(HEADERS)
+	$(COMPILE) FindComponents.c
 
 GraphClient.o : GraphClient.c $(HEADERS)
 	$(COMPILE) GraphClient.c
@@ -32,16 +32,16 @@ $(BASE_OBJECTS) : $(BASE_SOURCES) $(HEADERS)
 	$(COMPILE) $(BASE_SOURCES)
 
 clean :
-	$(REMOVE) FindPath GraphClient FindPath.o GraphClient.o $(BASE_OBJECTS)
+	$(REMOVE) FindComponents GraphClient FindComponents.o GraphClient.o $(BASE_OBJECTS)
 
-checkFind : FindPath
-	$(MEMCHECK) FindPath in3 junk3
+checkFind : FindComponents
+	$(MEMCHECK) FindComponents in3 junk3
 
 checkClient : GraphClient
 	$(MEMCHECK) GraphClient
 
 submit:
-	submit cmps101-pt.u19 pa3 Makefile README $(BASE_SOURCES) $(HEADERS) FindPath.c GraphTest.c
+	submit cmps101-pt.u19 pa4 Makefile README $(BASE_SOURCES) $(HEADERS) GraphTest.c FindComponents.c 
 
 check:
-	ls -la /afs/cats.ucsc.edu/class/cmps101-pt.u19/pa3/cbhong
+	ls -la /afs/cats.ucsc.edu/class/cmps101-pt.u19/pa4/cbhong	
