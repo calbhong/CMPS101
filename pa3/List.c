@@ -1,6 +1,6 @@
 /*********************************************************************************
 * Calvin Hong, cbhong
-* 2019 Summer CMPS101 PA1
+* 2019 Summer CMPS101 PA3
 * List.c
 * List ADT
 *********************************************************************************/
@@ -157,10 +157,6 @@ void moveFront(List L){
 		printf("List Error: calling moveFront() on NULL List reference\n");
 	 	exit(1);
 	}
-	if(L->length == 0){
-		printf("List Error: calling moveFront() on empty List reference\n");
-		exit(1);
-	}
 	if(L->length > 0){
 		L->cursor = L->front;
 		L->index = 0;
@@ -172,10 +168,6 @@ void moveBack(List L){
 	if(L == NULL){
 		printf("List Error: calling moveBack() on NULL List reference\n");
 	 	exit(1);
-	}
-	if(L->length == 0){
-		printf("List Error: calling moveBack() on empty List reference\n");
-		exit(1);
 	}
 	if(L->length > 0){
 		L->cursor = L->back;

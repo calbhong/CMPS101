@@ -1,8 +1,17 @@
+/*********************************************************************************
+* Calvin Hong, cbhong
+* 2019 Summer CMPS101 PA3
+* Graph.h
+* Header File for Graph ADT
+*********************************************************************************/
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
 /***macros****/
 #define NIL -2
 #define INF -1
+#define WHITE 1
+#define GRAY 2
+#define BLACK 3
 #include "List.h"
 // Exported type --------------------------------------------------------------
 typedef struct GraphObj* Graph;

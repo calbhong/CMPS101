@@ -1,8 +1,8 @@
 /*********************************************************************************
 * Calvin Hong, cbhong
-* 2019 Summer CMPS101 PA1
+* 2019 Summer CMPS101 PA3
 * List.h
-* Header file for List ADT
+* Header File for List ADT 
 *********************************************************************************/
 #ifndef _LIST_H_INCLUDE_
 #define _LIST_H_INCLUDE_
