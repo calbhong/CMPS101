@@ -3,6 +3,11 @@
 // cbhong
 // CMPS101
 
+//There's a strange memory thing that happens with
+//deleteBack() and equals()
+//Not quite sure since it was fine in pa1
+//moveFront() and moveBack() were changed slightly as to not exit incorrectly
+
 List.c
 List.h
 Graph.c

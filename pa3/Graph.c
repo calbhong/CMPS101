@@ -167,25 +167,25 @@ void addArc(Graph G, int u, int v){
 		printf("Graph Error: calling addArc() on invalid vertex index. \n");
 		exit(1);
 	}else{
-        if (length(G->adj[u]) != 0) {
-            moveFront(G->adj[u]);
-            while(index(G->adj[u]) != -1){
-                if (v < get(G->adj[u])) {
-                    insertBefore(G->adj[u], v);
-                    break;
-                }else if (v > back(G->adj[u])) {
-                    append(G->adj[u], v);
-                    break;
-                }else if (get(G->adj[u]) == v) {
-                    break;
-                }
-                moveNext(G->adj[u]);
-            }
-        } else {
-            append(G->adj[u], v);
-        }
-        G->size++;
-    }
+		if (length(G->adj[u]) != 0) {
+			moveFront(G->adj[u]);
+			while(index(G->adj[u]) != -1){
+				if (v < get(G->adj[u])) {
+					insertBefore(G->adj[u], v);
+					break;
+				}else if (v > back(G->adj[u])) {
+					append(G->adj[u], v);
+					break;
+				}else if (get(G->adj[u]) == v) {
+					break;
+				}
+				moveNext(G->adj[u]);
+			}
+		} else {
+			append(G->adj[u], v);
+		}
+		G->size++;
+	}
 }
 void BFS(Graph G, int s){
 	if (G == NULL) {
@@ -200,28 +200,29 @@ void BFS(Graph G, int s){
 			G->parent[i] = NIL;
 			G->distance[i] = INF;
 		}
-	    List Q = newList();
-	    G->source = s;
-	    G->color[s] = GRAY;
-	    G->distance[s] = 0;
-	    append(Q,s);
+		List Q = newList();
+		G->source = s;
+		G->color[s] = GRAY;
+		G->distance[s] = 0;
+		append(Q,s);
 
-	    while(length(Q) > 0){
-	        int temp = back(Q);
-	        deleteBack(Q);
-	        moveFront(G->adj[temp]);
-	        while(index(G->adj[temp]) > -1){
-	            int u = get(G->adj[temp]);
+		while(length(Q) > 0){
+			int temp = back(Q);
+			deleteBack(Q);
+			moveFront(G->adj[temp]);
+			while(index(G->adj[temp]) > -1){
+				int u = get(G->adj[temp]);
 				if(G->color[u] == WHITE){
-	                G->color[u] =  GRAY;
-	                G->parent[u] = temp;
-	                G->distance[u] = G->distance[temp] + 1;
-	                prepend(Q,u);
-	            }
-	            moveNext(G->adj[temp]);
-	        }
-	    }
-	    freeList(&Q);
+					G->color[u] =  GRAY;
+					G->parent[u] = temp;
+					G->distance[u] = G->distance[temp] + 1;
+					prepend(Q,u);
+				}
+				moveNext(G->adj[temp]);
+			}
+			G->color[temp] = BLACK;
+		}
+		freeList(&Q);
 	}
 }
 /*** Other operations ***/

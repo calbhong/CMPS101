@@ -119,17 +119,17 @@ int equals(List A, List B){
 	}
 	if(A->length != B->length){
 		return 0;
-	}
+	}else{
+		Node tempA = A->front;
+		Node tempB = B->front;
 
-	Node tempA = A->front;
-	Node tempB = B->front;
-
-	while(tempB != NULL && tempA != NULL){
-		if(tempB->data != tempA->data){
-			return 0;
-		}
-		tempA = tempA->next;
-		tempB = tempB->next;
+		while(tempB != NULL && tempA != NULL){
+			if(tempB->data != tempA->data){
+				return 0;
+			}
+			tempA = tempA->next;
+			tempB = tempB->next;
+		}		
 	}
 	return 1;
 }

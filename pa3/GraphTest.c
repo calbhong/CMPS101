@@ -13,30 +13,26 @@ int main(int argc, char* argv[]){
    List  C = newList(); // central vertices 
    List  P = newList(); // peripheral vertices 
    List  E = newList(); // eccentricities 
-   Graph G = NULL;
 
-   // Build graph G 
-   G = newGraph(n);
-   for(i=1; i<n; i++){
-      if( i%7!=0 ) addEdge(G, i, i+1);
-      if( i<=28  ) addEdge(G, i, i+7);
-   }
-   addEdge(G, 9, 31);
-   addEdge(G, 17, 13);
-   addEdge(G, 14, 33);
-
-   /*
-   int getOrder(Graph G);
-   int getSize(Graph G);
-   int getSource(Graph G);
-   int getParent(Graph G, int u);
-   int getDist(Graph G, int u);
-   void getPath(List L, Graph G, int u);
-   */
-
+   Graph G = newGraph(6);
+   addEdge(G,1,2);
+   addEdge(G,1,3);
+   addEdge(G,2,4);
+   addEdge(G,2,5);
+   addEdge(G,2,6);
+   addEdge(G,3,4);
+   addEdge(G,4,5);
+   addEdge(G,5,6);
+   BFS(G,1);
+   printf("getParent(1):%d\n",getParent(G,1));
+   printf("getParent(2):%d\n",getParent(G,2));
+   printf("getParent(3):%d\n",getParent(G,3));
+   printf("getParent(4):%d\n",getParent(G,4));
+   printf("getParent(5):%d\n",getParent(G,5));
+   printf("getParent(6):%d\n",getParent(G,6));
 
    // Print adjacency list representation of G
-   printGraph(stdout, G);
+   printGraph( G);
 
    // Calculate the eccentricity of each vertex 
    for(s=1; s<=n; s++){
@@ -79,14 +75,14 @@ int main(int argc, char* argv[]){
    printf("\n");
    printf("Radius = %d\n", min);
    printf("Central vert%s: ", length(C)==1?"ex":"ices");
-   printList(stdout, C);
+   printList( C);
    printf("\n");
    printf("Diameter = %d\n", max);
    printf("Peripheral vert%s: ", length(P)==1?"ex":"ices");
-   printList(stdout, P);
+   printList( P);
    printf("\n");
 
-   // Free objects 
+   // Free objects
    freeList(&C);
    freeList(&P);
    freeList(&E);

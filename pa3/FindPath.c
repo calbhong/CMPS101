@@ -70,13 +70,13 @@ int main(int argc, char * argv[]){
 		BFS(G, u);
 		getPath(L,G,v);
 
-		int distance = getDist(G, v);
-		fprintf(output, "The distance from %d to %d is ", u, v);
+		int dist = getDist(G, v);
+		fprintf(output, "The dist from %d to %d is ", u, v);
 		
-		if(distance == INF){
+		if(dist == INF){
 			fprintf(output, "infinity\n");
 		}else{
-			fprintf(output, "%d\n", distance);
+			fprintf(output, "%d\n", dist);
 		}
 
 
