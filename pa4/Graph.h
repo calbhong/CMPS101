@@ -7,11 +7,11 @@
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
 /***macros****/
-#define NIL -2
-#define INF -1
-#define WHITE 1
-#define GRAY 2
-#define BLACK 3
+#define UNDEF -2
+#define NIL -1
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
 #include "List.h"
 // Exported type --------------------------------------------------------------
 typedef struct GraphObj* Graph;

@@ -10,7 +10,7 @@
 #include "List.h"
 
 typedef struct NodeObj{
-	void* data;
+	int data;
 	struct NodeObj* prev;
 	struct NodeObj* next;
 } NodeObj;
@@ -25,7 +25,7 @@ typedef struct ListObj{
 	int index;
 } ListObj;
 
-Node newNode(void* data){
+Node newNode(int data){
 	Node N = malloc(sizeof(NodeObj));
 	N->data = data;
 	N->next = NULL;
@@ -75,7 +75,7 @@ int index(List L){
 	}
 	return L->index;
 }
-void *front(List L){
+int front(List L){
 	if(L == NULL){
 		printf("List Error: calling front() on NULL List reference\n");
 		exit(1);
@@ -86,7 +86,7 @@ void *front(List L){
 	}
 	return L->front->data;
 }
-void *back(List L){
+int back(List L){
 	if(L == NULL){
 		printf("List Error: calling back() on NULL List reference\n");
 		exit(1);
@@ -97,7 +97,7 @@ void *back(List L){
 	}
 	return L->back->data;
 }
-void *get(List L){
+int get(List L){
 	if(L == NULL){
 		printf("List Error: calling get() on NULL List reference\n");
 		exit(1);
@@ -112,7 +112,6 @@ void *get(List L){
 	}
 	return L->cursor->data;
 }
-/*
 int equals(List A, List B){
 	if(A == NULL || B == NULL){
 		printf("List Error: calling equals() on NULL List reference\n");
@@ -121,20 +120,19 @@ int equals(List A, List B){
 	if(A->length != B->length){
 		return 0;
 	}
-
 	Node tempA = A->front;
 	Node tempB = B->front;
 
-	while(tempB != NULL && tempA != NULL){
-		if(tempB->data != tempA->data){
+	while(tempA != NULL && tempB != NULL){
+		if(tempA->data != tempB->data){
 			return 0;
+		}else{
+			tempA = tempA->next;
+			tempB = tempB->next;
 		}
-		tempA = tempA->next;
-		tempB = tempB->next;
-	}
+	}		
 	return 1;
 }
-*/
 
 void clear(List L){
 	if( L == NULL){
@@ -159,10 +157,6 @@ void moveFront(List L){
 		printf("List Error: calling moveFront() on NULL List reference\n");
 	 	exit(1);
 	}
-	if(L->length == 0){
-		printf("List Error: calling moveFront() on empty List reference\n");
-		exit(1);
-	}
 	if(L->length > 0){
 		L->cursor = L->front;
 		L->index = 0;
@@ -174,10 +168,6 @@ void moveBack(List L){
 	if(L == NULL){
 		printf("List Error: calling moveBack() on NULL List reference\n");
 	 	exit(1);
-	}
-	if(L->length == 0){
-		printf("List Error: calling moveBack() on empty List reference\n");
-		exit(1);
 	}
 	if(L->length > 0){
 		L->cursor = L->back;
@@ -215,7 +205,7 @@ void moveNext(List L){
 	}	
 }
 
-void prepend(List L, void* data){
+void prepend(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling prepend() on NULL List reference\n");
 		exit(1);
@@ -228,10 +218,10 @@ void prepend(List L, void* data){
 		temp->next = L->front;
 		L->front = temp;
 		L->index++;
-	} 
+	}
 	L->length++;	
 }
-void append(List L, void* data){
+void append(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling append() on NULL List reference\n");
 		exit(1);
@@ -248,7 +238,7 @@ void append(List L, void* data){
 	L->length++;
 }
 
-void insertBefore(List L, void* data){
+void insertBefore(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling insertBefore() on NULL List reference\n");
 		exit(1);
@@ -269,7 +259,7 @@ void insertBefore(List L, void* data){
 	}
 }
 
-void insertAfter(List L, void* data){
+void insertAfter(List L, int data){
 	if(L == NULL){
 		printf("List Error: calling insertAfter() on NULL List reference\n");
 		exit(1);
@@ -293,48 +283,41 @@ void insertAfter(List L, void* data){
 
 
 void deleteFront(List L){
-	Node N = NULL;
 	if(L == NULL){
 		printf("List Error: calling deleteFront() on NULL List reference\n");
 		exit(1);
 	}
-	N = L->front;
+	Node N = L->front;
 	if(L->cursor == N){
    		L->index = -1;
    		L->cursor = NULL;
-	}
-	if(length(L) > 1){
+	}if(length(L) > 1){
 		L->front = L->front->next;
-	}
-	if(L->index != -1){
+	}if(L->index != -1){
 		L->index--;
 	}
 	L->length--;
 	freeNode(&N);
 }
 void deleteBack(List L){
-	Node N = NULL;
 	if(L == NULL){
 		printf("List Error: calling deleteBack() on NULL List reference\n");
 		exit(1);
 	}
-	N = L->back;
-	if(L->cursor == N){
-		L->back = L->back->prev;
+	Node N = L->back;
+	if(L->cursor == L->back){
 		L->index = -1;
 		L->cursor = NULL;
-	}
-	else if(L->front == N){
-		L->front = L->back = NULL;
-	}else{
+	}if(L->front == L->back){
+		L->front =  NULL;
+	}if(L->back->prev != NULL){
 		L->back = L->back->prev;
 	}
+	L->back->next = NULL;
 	L->length--;
 	freeNode(&N);
 }
 void delete(List L){
-	Node N = NULL;
-	N = L->cursor;
 	if(L == NULL){
 		printf("List Error: calling delete() on NULL List reference\n");
 		exit(1);
@@ -343,13 +326,13 @@ void delete(List L){
 		printf("List Error: calling delete() on a null cursor\n");
 		exit(1);
 	}
-	else if(N == L->front){
+	Node N = L->cursor;
+	if(N == L->front){
 		deleteFront(L);
 	}
 	else if(N == L->back){
 		deleteBack(L);
-	}
-	else if(index(L) >= 0){
+	}else if(index(L) >= 0){
 		if(L->cursor->prev == NULL){
 			L->front = L->cursor->next;
 		}else if(L->cursor->next == NULL){
@@ -358,23 +341,21 @@ void delete(List L){
 			L->cursor->prev->next = L->cursor->next;
 			L->cursor->next->prev = L->cursor->prev;
 		}
+	freeNode(&N);
 	L->cursor = NULL;
 	L->index = -1;
 	L->length--;
 
-	freeNode(&N);
 	}
-
 }
 
 void printList(FILE* out, List L){
 	Node temp = L->front;
 	while(temp != NULL){
-		fprintf(out, "%p ", temp->data);
+		fprintf(out, "%d ", temp->data);
 		temp = temp->next;
 	}
 }
-
 
 List copyList(List L){
 	List c = newList();
@@ -385,5 +366,4 @@ List copyList(List L){
 	}
 	return c;
 }
-
 	

@@ -6,37 +6,40 @@
 *********************************************************************************/
 #include<stdio.h>
 #include<stdlib.h>
-#include "Graph.h"
+#include<assert.h>
 
+#include "Graph.h"
 
 typedef struct GraphObj{
 	List* adj; 
 	int* color;
 	int* parent;
-	int* distance;
-
+	int* discover;
+	int* finish;
 	int order;
 	int size;
-	int source;
+	int time;
 } GraphObj;
 
-Graph newGraph(int n){
+Graph newGraph(int n){ 
 	Graph graph = malloc(sizeof(struct GraphObj));
 
 	graph->adj = calloc(n+1, sizeof(List));
 	graph->color = calloc(n+1, sizeof(int));
 	graph->parent = calloc(n+1, sizeof(int));
-	graph->distance = calloc(n+1, sizeof(int));
+	graph->discover = calloc(n+1, sizeof(int));
+	graph->finish = calloc(n+1, sizeof(int));
 
 	graph->order = n;
 	graph->size = 0;
-	graph->source = NIL;
+	graph->time = UNDEF;
 
 	for(int i = 1; i <= n; i++){
 		graph->adj[i] = newList();
 		graph->color[i] = WHITE;
 		graph->parent[i] = NIL;
-		graph->distance[i] = INF;
+		graph->discover[i] = UNDEF;
+		graph->finish[i] = UNDEF;
 	}
 	return graph;
 }
@@ -48,7 +51,8 @@ void freeGraph(Graph* pG){
 
 	free(temp->adj);
 	free(temp->parent);
-	free(temp->distance);
+	free(temp->discover);
+	free(temp->finish);
 	free(temp->color);
 
 	free(*pG);
@@ -70,13 +74,7 @@ int getSize(Graph G){
 	}
 	return G->size;
 }
-int getSource(Graph G){
-	if (G == NULL) {
-		printf("Graph Error: getSource() called on NULL Graph. \n");
-		exit(1);
-	}
-	return G->source;
-}
+
 int getParent(Graph G, int u){
 	if (G == NULL){
 		printf("Graph Error: getParent() called on NULL grpah reference. \n");
@@ -89,73 +87,30 @@ int getParent(Graph G, int u){
 	}
 	
 }
-int getDist(Graph G, int u){
+int getDiscover(Graph G, int u){
 	if (G == NULL){
-		printf("Graph Error: calling getDist() on NULL graph reference. \n");
+		printf("Graph Error: calling getDiscover() on NULL graph reference. \n");
 		exit(1);
 	}else if(u < 1 || u > getOrder(G)){
-		printf("Graph Error: calling getDist() on NULL graph reference. \n");
+		printf("Graph Error: calling getDiscover() on NULL graph reference. \n");
 		exit(1);
 	}else{
-		return G->distance[u];		
+		return G->discover[u];		
 	}
 }
 
-void getPath(List L, Graph G, int u){
+int getFinish(Graph G, int u){
 	if (G == NULL){
-		printf("Graph Error: calling getPath() on NULL graph reference. \n");
+		printf("Graph Error: getFinish() called on NULL graph reference. \n");
 		exit(1);
-	}else if(u < 1 || u > getOrder(G)){
-		printf("Graph Error: calling getPath() on NULL graph reference. \n");
+	} else if(u < 1 || u > getOrder(G)){
+		printf("Graph Error: getFinish() called on invalid vertex index. \n");
 		exit(1);
-	}else if(getSource(G) == NIL){
-		printf("Graph Error: calling getPath() on NULL graph reference. \n");
-		exit(1);
-	}else{
-		if (u == getSource(G)) {
-			append(L, u);
-		}else if(getParent(G, u) == NIL){
-			clear(L);
-			append(L, NIL);
-		}else{
-			getPath(L, G, G->parent[u]);
-			append(L, u);
-		}
-	}
+	} 
+	return G->finish[u];
 }
 
 /*** Manipulation procedures ***/
-void makeNull(Graph G){
-	if (G == NULL) {
-		printf("Graph Error: calling makeNull() on NULL graph reference. \n");
-		exit(1);
-	}else{
-		for (int i = 1; i <= getOrder(G); i++) {
-			clear(G->adj[i]);
-			G->color[i] = WHITE; 
-			G->parent[i] = NIL;
-			G->distance[i] = INF;
-		}	
- 		G->size = 0;
-		G->source = NIL;
-	}
-}
-void addEdge(Graph G, int u, int v){
-	if (G == NULL) {
-		printf("Graph Error: calling addEdge() on NULL Graph reference. \n");
-		exit(1);
-	}else if (u < 1 || u > getOrder(G)){
-		printf("Graph Error: calling addArc() on invalid vertex index. \n");
-		exit(1);
-	}else if (v < 1 || v > getOrder(G)){
-		printf("Graph Error: calling addArc() on invalid vertex index. \n");
-		exit(1);
-	}else{
-		addArc(G, u, v);
-		addArc(G, v, u);
-		G->size--;
-	}
-}
 void addArc(Graph G, int u, int v){
 	if (G == NULL) {
 		printf("Graph Error: calling addArc() on NULL Graph reference. \n");
@@ -187,45 +142,117 @@ void addArc(Graph G, int u, int v){
 		G->size++;
 	}
 }
-void BFS(Graph G, int s){
+
+void addEdge(Graph G, int u, int v){
 	if (G == NULL) {
-		printf("Graph Error: BFS() called on NULL Graph reference. \n");
+		printf("Graph Error: calling addEdge() on NULL Graph reference. \n");
 		exit(1);
-	} else if(!(s >= 1 && s <= getOrder(G))) {
-		printf("Graph Error: calling BFS() with invalid source index. \n");
+	}else if (u < 1 || u > getOrder(G)){
+		printf("Graph Error: calling addArc() on invalid vertex index. \n");
+		exit(1);
+	}else if (v < 1 || v > getOrder(G)){
+		printf("Graph Error: calling addArc() on invalid vertex index. \n");
 		exit(1);
 	}else{
-		for(int i = 0; i < (G->order +1); i++){
+		addArc(G, u, v);
+		addArc(G, v, u);
+		G->size--;
+	}
+}
+
+void Visit(Graph G, List S, int u){
+	if (G == NULL){
+		printf("Graph Error: calling Visit() on NULL Graph reference. \n");
+		exit(1);		
+	}else {
+		G->color[u] = GRAY;
+		G->discover[u] = ++G->time;
+		if (length(G->adj[u]) > 0){
+			moveFront(G->adj[u]);
+			for(int i=0; i<length(G->adj[u]); i++){
+				int v = get(G->adj[u]);
+				if(G->color[v] == WHITE){
+					G->parent[v] = u;
+					Visit(G, S, v);
+				}
+			moveNext(G->adj[u]);
+			}
+		}
+		G->color[u] = BLACK;
+		G->finish[u] = ++G->time;
+		prepend(S, u);
+		deleteBack(S);	
+	}
+}
+
+void DFS(Graph G, List S){
+	if (G == NULL) {
+		printf("Graph Error: DFS() called on NULL Graph reference. \n");
+		exit(1);
+	} else if(length(S) != getOrder(G)) {
+		printf("Graph Error: calling DFS() with invalid source index. \n");
+		exit(1);
+	}else{
+		for(int i=1; i<=getOrder(G); i++){
 			G->color[i] = WHITE;
 			G->parent[i] = NIL;
-			G->distance[i] = INF;
+			G->discover[i] = UNDEF;
+			G->finish[i] = UNDEF;
 		}
-		List Q = newList();
-		G->source = s;
-		G->color[s] = GRAY;
-		G->distance[s] = 0;
-		append(Q,s);
-
-		while(length(Q) > 0){
-			int temp = back(Q);
-			deleteBack(Q);
-			moveFront(G->adj[temp]);
-			while(index(G->adj[temp]) > -1){
-				int u = get(G->adj[temp]);
-				if(G->color[u] == WHITE){
-					G->color[u] =  GRAY;
-					G->parent[u] = temp;
-					G->distance[u] = G->distance[temp] + 1;
-					prepend(Q,u);
-				}
-				moveNext(G->adj[temp]);
+		List L = copyList(S);
+		moveFront(L);
+		G->time = 0;
+		for(int i=1; i<= getOrder(G); i++){
+			int x = get(L);
+			if(G->color[x] == WHITE){
+				Visit(G, S, x);
 			}
-			G->color[temp] = BLACK;
+			moveNext(L);
 		}
-		freeList(&Q);
+		freeList(&L);
+		return;
 	}
 }
 /*** Other operations ***/
+Graph transpose(Graph G){
+	if(G == NULL){
+		printf("Graph Error: transpose() called on NULL graph reference. \n");
+		exit(1);
+	}
+	Graph H = newGraph(getOrder(G));
+	for(int i=1; i<=getOrder(G); i++){
+		if(length(G->adj[i]) > 0){
+			moveFront(G->adj[i]);
+			for(int j=0; j<length(G->adj[i]); j++){
+				addArc(H, get(G->adj[i]), i);
+				moveNext(G->adj[i]);
+		   }
+		}
+	}
+	return H;
+}
+Graph copyGraph(Graph G){
+	if(G == NULL){
+		printf("Graph Error: transpose() called on NULL graph reference. \n");
+		exit(1);
+	}
+	Graph H = newGraph(G->order);
+	for(int i=1; i<=getOrder(G); i++){
+		if(length(G->adj[i]) > 0){
+			moveFront(G->adj[i]);
+			for(int j=0; j<length(G->adj[i]); j++){
+				addArc(H, i, get(G->adj[i]));
+				moveNext(G->adj[i]);
+			}
+		}
+		H->color[i] = G->color[i];
+		H->parent[i] = G->parent[i];
+		H->discover[i] = G->discover[i];
+		H->finish[i] = G->finish[i]; 
+	}
+	return H;
+}
+
 void printGraph(FILE* out, Graph G){
 	if (G == NULL) {
 		printf("Graph Error: printGraph() called on NULL graph reference. \n");
