@@ -169,7 +169,7 @@ void Visit(Graph G, List S, int u){
 		G->discover[u] = ++G->time;
 		if (length(G->adj[u]) > 0){
 			moveFront(G->adj[u]);
-			for(int i=0; i<length(G->adj[u]); i++){
+			for(int i = 0; i < length(G->adj[u]); i++){
 				int v = get(G->adj[u]);
 				if(G->color[v] == WHITE){
 					G->parent[v] = u;
@@ -193,7 +193,7 @@ void DFS(Graph G, List S){
 		printf("Graph Error: calling DFS() with invalid source index. \n");
 		exit(1);
 	}else{
-		for(int i=1; i<=getOrder(G); i++){
+		for(int i=1; i<= getOrder(G); i++){
 			G->color[i] = WHITE;
 			G->parent[i] = NIL;
 			G->discover[i] = UNDEF;
@@ -202,7 +202,7 @@ void DFS(Graph G, List S){
 		List L = copyList(S);
 		moveFront(L);
 		G->time = 0;
-		for(int i=1; i<= getOrder(G); i++){
+		for(int i = 1; i<= getOrder(G); i++){
 			int x = get(L);
 			if(G->color[x] == WHITE){
 				Visit(G, S, x);
@@ -237,10 +237,10 @@ Graph copyGraph(Graph G){
 		exit(1);
 	}
 	Graph H = newGraph(G->order);
-	for(int i=1; i<=getOrder(G); i++){
+	for(int i = 1; i <= getOrder(G); i++){
 		if(length(G->adj[i]) > 0){
 			moveFront(G->adj[i]);
-			for(int j=0; j<length(G->adj[i]); j++){
+			for(int j = 0; j < length(G->adj[i]); j++){
 				addArc(H, i, get(G->adj[i]));
 				moveNext(G->adj[i]);
 			}
